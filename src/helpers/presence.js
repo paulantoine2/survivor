@@ -1,7 +1,7 @@
 import { auth, rt, db } from '../services/firebase';
 import { database, firestore } from 'firebase/app';
 
-export default async function setupPresence(roomId) {
+export async function turnOnPresence(roomId) {
   if (!auth.currentUser) return;
   if (!roomId) return;
   const userId = auth.currentUser.uid;
@@ -35,4 +35,14 @@ export default async function setupPresence(roomId) {
         return userStatusFirestoreRef.update(isOnlineForFirestore);
       });
   });
+}
+
+export async function turnOffPresence(roomId) {
+  if (!auth.currentUser) return;
+  if (!roomId) return;
+  const userId = auth.currentUser.uid;
+  const userStatusDatabaseRef = rt.ref(`/status/${roomId}/${userId}`);
+  await rt.ref('.info/connected').off();
+  await userStatusDatabaseRef.onDisconnect().cancel();
+  return userStatusDatabaseRef.remove();
 }

@@ -1,8 +1,14 @@
 import React from 'react';
 import { Container, Typography, TextField, Button, Grid, CircularProgress, Checkbox } from '@material-ui/core';
-import { db } from '../../services/firebase';
-import { firestore } from 'firebase/app';
-import setupPresence from '../../helpers/setupPresence';
+import { turnOnPresence, turnOffPresence } from '../../helpers/presence';
+import {
+  subscribeMessages,
+  subscribePlayers,
+  sendMessage,
+  quitGameRoom,
+  updatePlayer,
+  getCurrentRoom,
+} from '../../helpers/gameRoom';
 
 export default class GameScreen extends React.Component {
   constructor() {
@@ -12,95 +18,38 @@ export default class GameScreen extends React.Component {
       players: [],
       typed: '',
       loading: true,
-      gameRoom: null,
     };
     this.gameRoom = null;
+    this.roomId = null;
   }
-  componentDidMount() {
+  async componentDidMount() {
     const { user, history } = this.props;
-    db.collectionGroup('players')
-      .where('userId', '==', user.uid)
-      .get()
-      .then(async (docs) => {
-        if (!docs.size) return history.push('/');
-        let roomId = null;
-        docs.forEach((doc) => {
-          roomId = doc.ref.parent.parent.id;
-        });
-        await setupPresence(roomId);
-        this.gameRoom = db.collection('gameRoom').doc(roomId);
-        this.gameRoom
-          .collection('messages')
-          .orderBy('timestamp')
-          .onSnapshot((querySnapshot) => {
-            let messages = [];
-            querySnapshot.forEach(function (doc) {
-              messages.push({
-                message: doc.data().message,
-                id: doc.id,
-              });
-            });
-            this.setState({ messages });
-          });
-        this.gameRoom.collection('players').onSnapshot((querySnapshot) => {
-          let players = [];
-          querySnapshot.forEach(function (doc) {
-            players.push({
-              username: doc.data().username,
-              team: doc.data().team,
-              status: doc.data().status,
-              ready: doc.data().ready,
-              id: doc.id,
-            });
-          });
-          this.setState({ players });
-        });
-        this.setState({ loading: false });
-      });
+    this.roomId = await getCurrentRoom(user.uid);
+    if (!this.roomId) return history.push('/');
+    await turnOnPresence(this.roomId);
+    subscribePlayers(this.roomId, (players) => this.setState({ players }));
+    subscribeMessages(this.roomId, (messages) => this.setState({ messages }));
+    this.setState({ loading: false });
   }
 
-  handleChange = (event) => {
+  handleType = (event) => {
     this.setState({
       typed: event.target.value,
     });
   };
-  handleSubmit = (event) => {
+  handleSubmit = async (event) => {
     event.preventDefault();
-    const { uid } = this.props.user;
-    this.gameRoom
-      .collection('messages')
-      .doc()
-      .set({
-        message: this.state.typed,
-        senderId: uid,
-        timestamp: firestore.FieldValue.serverTimestamp(),
-        messageType: 'TEXT',
-      })
-      .then(function () {
-        console.log('Document successfully written!');
-      })
-      .catch(function (error) {
-        console.error('Error writing document: ', error);
-      });
+    await sendMessage(this.roomId, this.props.user.uid, this.state.typed);
     this.setState({ typed: '' });
   };
-  handleQuit = (event) => {
-    const { user, history } = this.props;
-    this.gameRoom
-      .collection('players')
-      .doc(user.uid)
-      .delete()
-      .then(() => {
-        console.log('Document successfully deleted!');
-        history.push('/');
-      });
+  handleQuit = async (event) => {
+    await turnOffPresence(this.roomId);
+    await quitGameRoom(this.roomId, this.props.user.uid);
+    this.props.history.push('/');
   };
-  handleReady = (event) => {
-    const { checked } = event.target;
-    const { user } = this.props;
-    console.log('test');
-    this.gameRoom.collection('players').doc(user.uid).update({
-      ready: checked,
+  handleReady = async (event) => {
+    await updatePlayer(this.roomId, this.props.user.uid, {
+      ready: event.target.checked,
     });
   };
 
@@ -148,7 +97,7 @@ export default class GameScreen extends React.Component {
                   variant="outlined"
                   fullWidth
                   margin="normal"
-                  onChange={this.handleChange}
+                  onChange={this.handleType}
                   value={this.state.typed}
                 />
                 <Button type="submit" fullWidth variant="contained" color="primary">

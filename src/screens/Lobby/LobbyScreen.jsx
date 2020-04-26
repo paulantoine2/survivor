@@ -2,6 +2,7 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { db, auth } from '../../services/firebase';
+import { joinGameRoom, fetchRooms } from '../../helpers/gameRoom';
 import { TableHead, Table, TableRow, TableCell, TableBody, Button, CircularProgress } from '@material-ui/core';
 
 export default class LobbyScreen extends React.Component {
@@ -22,29 +23,13 @@ export default class LobbyScreen extends React.Component {
       .then((docs) => {
         if (docs.size) return history.push('/play');
       });
-    await this.gameRoom.get().then((snapshot) => {
-      const rooms = [];
-      snapshot.forEach((doc) => {
-        rooms.push({
-          id: doc.id,
-          players: 0,
-        });
-      });
-      this.setState({ rooms });
-    });
-    this.setState({ loading: false });
+    this.setState({ rooms: await fetchRooms(), loading: false });
   }
 
   handleJoin = async (roomId) => {
     const { user, history } = this.props;
     this.setState({ loading: true });
-
-    await this.gameRoom.doc(roomId).collection('players').doc(user.uid).set({
-      userId: user.uid,
-      username: user.email,
-      team: 'WAKATI',
-      ready: false,
-    });
+    await joinGameRoom(roomId, user.uid, user.email);
     history.push('/play');
   };
 
@@ -75,7 +60,7 @@ export default class LobbyScreen extends React.Component {
             {this.state.rooms.map((room) => (
               <TableRow key={room.id}>
                 <TableCell>{room.id}</TableCell>
-                <TableCell>{room.players.length}</TableCell>
+                <TableCell>{room.players}</TableCell>
                 <TableCell>
                   <Button onClick={() => this.handleJoin(room.id)}>Rejoindre</Button>
                 </TableCell>

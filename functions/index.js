@@ -37,3 +37,9 @@ exports.onUserStatusChanged = functions.database.ref('/status/{roomId}/{userId}'
   // ... and write it to Firestore.
   return userStatusFirestoreRef.update(eventStatus);
 });
+
+exports.onUsersReady = functions.firestore.document('gameRoom/{roomId}').onUpdate((change, context) => {
+  const data = change.after.data();
+
+  if (data.)
+});
