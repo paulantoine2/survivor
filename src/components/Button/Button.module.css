@@ -1,0 +1,23 @@
+/* .border {
+  composes: border from '../Step/Step.module.css';
+  height: auto;
+} */
+.button {
+  text-transform: uppercase;
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 6px 15px;
+  border: solid 3px transparent;
+  border-radius: 50px;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0)
+    ),
+    linear-gradient(180deg, #c8a96c, #795c28);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 2px 1000px 1px #1e2328 inset;
+  /* color: #1e2328; */
+  color: #cdbe91;
+  cursor: pointer;
+}

@@ -1,0 +1,6 @@
+.container {
+  display: flex;
+}
+.container > * {
+  margin: 0 5px;
+}

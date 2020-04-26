@@ -1,0 +1,25 @@
+.border {
+  background: linear-gradient(180deg, #c8a96c, #795c28);
+  padding: 4px;
+  border-radius: 100%;
+  width: 40px;
+  height: 40px;
+}
+.container {
+  background-color: #1e2328;
+  color: #cdbe91;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 25px;
+}
+.border__done {
+  composes: border;
+  background: transparent;
+}
+.border__wait {
+  composes: border__done;
+  opacity: 0.5;
+}
