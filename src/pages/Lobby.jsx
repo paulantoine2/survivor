@@ -1,11 +1,11 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { db, auth } from '../../services/firebase';
-import { joinGameRoom, fetchRooms } from '../../helpers/gameRoom';
+import { db, auth } from '../services/firebase';
+import { joinGameRoom, fetchRooms } from '../helpers/gameRoom';
 import { TableHead, Table, TableRow, TableCell, TableBody, Button, CircularProgress } from '@material-ui/core';
 
-export default class LobbyScreen extends React.Component {
+export default class LobbyPage extends React.Component {
   gameRoom = db.collection('gameRoom');
   constructor() {
     super();

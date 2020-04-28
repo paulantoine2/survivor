@@ -2,9 +2,6 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 
-// Since this code will be running in the Cloud Functions environment
-// we call initialize Firestore without any arguments because it
-// detects authentication from the environment.
 const firestore = admin.firestore();
 
 // Create a new function which is triggered on changes to /status/{uid}
@@ -38,8 +35,16 @@ exports.onUserStatusChanged = functions.database.ref('/status/{roomId}/{userId}'
   return userStatusFirestoreRef.update(eventStatus);
 });
 
-exports.onUsersReady = functions.firestore.document('gameRoom/{roomId}').onUpdate((change, context) => {
-  const data = change.after.data();
+// exports.onUsersReady = functions.firestore.document('gameRoom/{roomId}/players/{userId}').onUpdate(async (change, context) => {
+//   const { roomId } = context.params;
+//   const players = await change.after.ref.parent.get();
 
-  if (data.)
-});
+//   let players_ready = true;
+//   players.forEach((player) => {
+//     if (!player.data().ready) players_ready = false;
+//   });
+//   if (!players_ready) return null;
+//   return firestore.collection('gameRoom').doc(roomId).update({
+//     sceneType: 'VOTING',
+//   });
+// });

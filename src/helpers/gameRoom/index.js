@@ -103,22 +103,30 @@ export function subscribeMessages(roomId, callback) {
     });
 }
 
-export async function getCurrentRoom(userId) {
-  let roomId = null;
-  await db
-    .collectionGroup('players')
-    .where('userId', '==', userId)
-    .get()
-    .then((docs) => {
-      if (!docs.size) return;
-      docs.forEach((doc) => {
-        roomId = doc.ref.parent.parent.id;
-      });
-    });
-  await db
-    .collection('gameRoom')
+export function subscribeGameroom(roomId, callback) {
+  db.collection('gameRoom')
     .doc(roomId)
-    .get()
-    .then((doc) => {});
+    .onSnapshot((gameRoom) => {
+      callback(gameRoom.data());
+    });
+}
+
+export function subscribePlayer(roomId, userId, callback) {
+  db.collection('gameRoom')
+    .doc(roomId)
+    .collection('players')
+    .doc(userId)
+    .onSnapshot((user) => {
+      callback(user.data());
+    });
+}
+
+export async function getCurrentRoom(userId) {
+  const current_player = await db.collectionGroup('players').where('userId', '==', userId).get();
+  if (!current_player.size) return null;
+  let roomId = null;
+  current_player.forEach((doc) => {
+    roomId = doc.ref.parent.parent.id;
+  });
   return roomId;
 }

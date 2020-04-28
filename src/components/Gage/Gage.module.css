@@ -29,12 +29,10 @@
 .unit__filled.unit__default {
   background: linear-gradient(180deg, #0596aa, #026e8f);
   border-bottom: solid 1px #0596aa;
-  box-shadow: aqua 0px 0px 5px;
 }
 .unit__filled.unit__green {
   background: linear-gradient(180deg, #369944, #294936);
   border-bottom: solid 1px #369944;
-  box-shadow: greenyellow 0px 0px 5px;
 }
 .unit__dimmed {
   composes: unit__filled;

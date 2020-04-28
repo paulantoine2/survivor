@@ -5,9 +5,9 @@ import TextField from '@material-ui/core/TextField';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { auth } from '../../services/firebase';
+import { auth } from '../services/firebase';
 
-export default class LoginScreen extends React.Component {
+export default class LoginPage extends React.Component {
   constructor() {
     super();
     this.state = {

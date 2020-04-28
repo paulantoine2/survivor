@@ -1,34 +1,43 @@
 import React from 'react';
-import { Container, Typography, TextField, Button, Grid, CircularProgress, Checkbox } from '@material-ui/core';
-import { turnOnPresence, turnOffPresence } from '../../helpers/presence';
-import {
-  subscribeMessages,
-  subscribePlayers,
-  sendMessage,
-  quitGameRoom,
-  updatePlayer,
-  getCurrentRoom,
-} from '../../helpers/gameRoom';
+import { Container, Typography, TextField, Button, Grid, CircularProgress, Card } from '@material-ui/core';
+import { turnOnPresence } from '../helpers/presence';
+import { subscribeMessages, sendMessage, getCurrentRoom, subscribeGameroom, subscribePlayer } from '../helpers/gameRoom';
+import { db } from '../services/firebase';
+import WaitingScreen from '../components/GameScreens/WaitingScreen';
+import Gage from '../components/Gage/Gage';
 
-export default class GameScreen extends React.Component {
+export default class GamePage extends React.Component {
   constructor() {
     super();
     this.state = {
-      messages: [],
-      players: [],
+      messages: null,
+      room: null,
+      player: null,
       typed: '',
       loading: true,
     };
-    this.gameRoom = null;
     this.roomId = null;
+    this.unsubscribeScreen = null;
   }
   async componentDidMount() {
     const { user, history } = this.props;
     this.roomId = await getCurrentRoom(user.uid);
     if (!this.roomId) return history.push('/');
     await turnOnPresence(this.roomId);
-    subscribePlayers(this.roomId, (players) => this.setState({ players }));
     subscribeMessages(this.roomId, (messages) => this.setState({ messages }));
+    subscribeGameroom(this.roomId, (room) => this.setState({ room }));
+    subscribePlayer(this.roomId, user.uid, (player) => {
+      if (!this.state.player || (this.state.player && this.state.player.screen.id !== player.screen.id)) {
+        console.log('redefined');
+        if (this.unsubscribeScreen) {
+          this.unsubscribeScreen();
+        }
+        this.unsubscribeScreen = player.screen.onSnapshot((screen) => {
+          console.log('screen.data() :>> ', screen.data());
+        });
+      }
+      this.setState({ player });
+    });
     this.setState({ loading: false });
   }
 
@@ -42,48 +51,28 @@ export default class GameScreen extends React.Component {
     await sendMessage(this.roomId, this.props.user.uid, this.state.typed);
     this.setState({ typed: '' });
   };
-  handleQuit = async (event) => {
-    await turnOffPresence(this.roomId);
-    await quitGameRoom(this.roomId, this.props.user.uid);
-    this.props.history.push('/');
-  };
-  handleReady = async (event) => {
-    await updatePlayer(this.roomId, this.props.user.uid, {
-      ready: event.target.checked,
-    });
-  };
 
   render() {
-    const { email, uid } = this.props.user;
-    return this.state.loading === true ? (
+    const { email } = this.props.user;
+    const { room, loading, player, messages } = this.state;
+    return loading || !room || !messages || !player ? (
       <CircularProgress />
     ) : (
       <Container component="main">
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={8}>
             <div>
               <Typography component="h1" variant="h5">
-                Partie
+                Partie - {room ? room.sceneType : 'loading'}
               </Typography>
               <div>Bienvenue {email}</div>
-              <ul>
-                {this.state.players.map((p) => (
-                  <li key={p.id}>
-                    {p.id === uid ? (
-                      <Checkbox checked={p.ready} onChange={this.handleReady} />
-                    ) : (
-                      <Checkbox checked={p.ready} disabled />
-                    )}
-                    {p.username} - {p.status}
-                  </li>
-                ))}
-              </ul>
-              <Button onClick={this.handleQuit} fullWidth variant="contained" color="secondary">
-                Quitter la partie
-              </Button>
+              <Card>
+                <WaitingScreen user={this.props.user} roomId={this.roomId} />
+              </Card>
+              <Gage max={6} value={player.stats.energy} />
             </div>
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={4}>
             <div>
               {this.state.messages.map((m) => (
                 <div key={m.id}>{m.message}</div>
