@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Checkbox, Button } from '@material-ui/core';
 import { turnOffPresence } from '../../helpers/presence';
 import { quitGameRoom, updatePlayer, subscribePlayers } from '../../helpers/gameRoom';
+import io from 'socket.io-client';
 
 class WaitingScreen extends Component {
+  socket = io('http://localhost:3000');
   constructor() {
     super();
     this.state = {

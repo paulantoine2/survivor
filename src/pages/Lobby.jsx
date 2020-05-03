@@ -1,12 +1,9 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import { db, auth } from '../services/firebase';
-import { joinGameRoom, fetchRooms } from '../helpers/gameRoom';
 import { TableHead, Table, TableRow, TableCell, TableBody, Button, CircularProgress } from '@material-ui/core';
 
 export default class LobbyPage extends React.Component {
-  gameRoom = db.collection('gameRoom');
   constructor() {
     super();
     this.state = {
@@ -14,28 +11,9 @@ export default class LobbyPage extends React.Component {
       rooms: [],
     };
   }
-  async componentDidMount() {
-    const { user, history } = this.props;
-    await db
-      .collectionGroup('players')
-      .where('userId', '==', user.uid)
-      .get()
-      .then((docs) => {
-        if (docs.size) return history.push('/play');
-      });
-    this.setState({ rooms: await fetchRooms(), loading: false });
-  }
+  async componentDidMount() {}
 
-  handleJoin = async (roomId) => {
-    const { user, history } = this.props;
-    this.setState({ loading: true });
-    await joinGameRoom(roomId, user.uid, user.email);
-    history.push('/play');
-  };
-
-  handleLogout = (event) => {
-    auth.signOut();
-  };
+  handleJoin = async (roomId) => {};
 
   render() {
     return this.state.loading ? (
@@ -45,9 +23,6 @@ export default class LobbyPage extends React.Component {
         <Typography component="h1" variant="h5">
           Lobby
         </Typography>
-        <Button onClick={this.handleLogout} color="secondary">
-          Se deconnecter
-        </Button>
         <Table size="small">
           <TableHead>
             <TableRow>
