@@ -1,0 +1,135 @@
+@value colors: "../../helpers/colors.css";
+@value teamColors: "../../helpers/teamColors.css";
+@value title, primary, primaryDark, highlight, bgPrimary, bgSecondary, text from colors;
+@value redLight, redDark, whiteLight, whiteDark, blueLight, blueDark, blackLight, blackDark from teamColors;
+
+.avatar {
+  border-radius: 100px;
+  width: 50px;
+  height: 50px;
+  border: solid 3px transparent;
+  /* border-radius: 50px; */
+  background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), linear-gradient(180deg, primary, primaryDark);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 2px 1000px 1px bgPrimary inset;
+  object-fit: cover;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 56px;
+}
+.flag {
+  background-color: bgSecondary;
+
+  display: block;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 15px;
+  margin-top: -15px;
+  border: solid 1px primaryDark;
+}
+.team {
+  border-bottom: solid 1px primary;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 5px;
+  color: highlight;
+  position: relative;
+}
+.red .flag {
+  color: redLight;
+}
+.red .team {
+  background-image: linear-gradient(redDark, redLight);
+}
+.white .flag {
+  color: whiteLight;
+}
+.white .team {
+  background-image: linear-gradient(whiteDark, whiteLight);
+}
+.yellow .flag {
+  color: primary;
+}
+.yellow .team {
+  background-image: linear-gradient(primaryDark, primary);
+}
+.black .flag {
+  color: blackLight;
+}
+.black .team {
+  background-image: linear-gradient(blackDark, blackLight);
+}
+.blue .flag {
+  color: blueLight;
+}
+.blue .team {
+  background-image: linear-gradient(blueDark, blueLight);
+}
+.team img {
+  position: absolute;
+  width: 100%;
+  height: 22px;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  object-fit: cover;
+  overflow: hidden;
+  mix-blend-mode: multiply;
+}
+.tooltip .avatar {
+  margin-left: 16px;
+  margin-top: -15px;
+  position: relative;
+  z-index: 1;
+}
+.top {
+  display: flex;
+  /* margin-bottom: 50px; */
+}
+.username {
+  margin-top: 10px;
+  margin-left: 10px;
+  font-weight: bold;
+  margin-right: 25px;
+  color: highlight;
+}
+.stats {
+  list-style: none;
+  padding: 0 16px;
+}
+.stats li {
+  margin: 0;
+  font-size: 0.9em;
+  color: text;
+}
+.number {
+  font-weight: bold;
+  color: highlight;
+}
+.immunity {
+  font-weight: bold;
+  text-transform: uppercase;
+  padding-top: 5px;
+}
+.stats li.immunity {
+  color: highlight;
+}
+.actions {
+  font-size: 12px;
+  text-align: right;
+  padding: 10px;
+  display: flex;
+}
+.actions > * {
+  margin-right: 3px;
+}

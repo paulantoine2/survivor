@@ -1,4 +1,5 @@
 import { addParameters } from '@storybook/react';
+import '../src/global.css';
 
 addParameters({
   backgrounds: [

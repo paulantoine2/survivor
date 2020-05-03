@@ -1,0 +1,70 @@
+@value colors: "../../helpers/colors.css";
+@value teamColors: "../../helpers/teamColors.css";
+@value title, primary, primaryDark, highlight, bgPrimary, bgSecondary, text, highlight from colors;
+@value redLight, redDark from teamColors;
+
+.message .icon img {
+  border-radius: 100px;
+  width: 50px;
+  height: 50px;
+  border: solid 3px transparent;
+  /* border-radius: 50px; */
+  background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), linear-gradient(180deg, #c8a96c, #795c28);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 2px 1000px 1px #1e2328 inset;
+}
+.message {
+  display: flex;
+  color: text;
+  font-family: Avenir;
+  align-items: flex-start;
+}
+.content {
+  display: flex;
+  padding-left: 10px;
+  flex-direction: column;
+  justify-content: center;
+}
+.username {
+  font-weight: bold;
+  margin-bottom: 3px;
+  font-size: 0.75em;
+  color: highlight;
+}
+
+.icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.teamWin {
+  background-color: highlight;
+  height: 50px;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  color: title;
+  text-transform: uppercase;
+  font-weight: bold;
+  /* font-size: 14px; */
+  border: solid 3px transparent;
+  background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), linear-gradient(180deg, primary, primaryDark);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 2px 1000px 1px bgSecondary inset;
+  margin: 20px 0;
+}
+.icon {
+  width: 44px;
+  height: 44px;
+  background-image: linear-gradient(redLight, redDark);
+  margin-left: 0px;
+  border-radius: 100px;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: highlight;
+}

@@ -1,33 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FaQuestion, FaVoteYea, FaFish, FaStar } from 'react-icons/fa';
-import { IoIosBonfire } from 'react-icons/io';
+import { FaQuestion } from 'react-icons/fa';
+import { GiCampfire, GiTotem, GiCookingPot, GiVote } from 'react-icons/gi';
 import style from './Step.module.css';
-import Tooltip from '../Tooltip/Tooltip';
 
 const STEPS = {
   STEP_CAMP: {
     label: 'camp',
-    icon: <IoIosBonfire />,
+    icon: <GiCampfire />,
   },
   STEP_COMFORT: {
-    label: 'camp',
-    icon: <FaFish />,
+    label: 'Epreuve de confort',
+    icon: <GiCookingPot />,
   },
   STEP_IMMUNITY: {
-    label: 'camp',
-    icon: <FaStar />,
+    label: "Epreuve d'immunité",
+    icon: <GiTotem />,
   },
   STEP_VOTE: {
-    label: 'camp',
-    icon: <FaVoteYea />,
+    label: 'Votes',
+    icon: <GiVote />,
   },
 };
 
 export default function Step({ state, timer, type, tooltip, ...rest }) {
   const icon = STEPS[type] ? STEPS[type].icon : <FaQuestion />;
 
-  const label = STEPS[type] ? STEPS[type].label : 'Inconnu';
+  // const label = STEPS[type] ? STEPS[type].label : 'Inconnu';
 
   const borderStyle = ((state) => {
     switch (state) {
@@ -42,15 +41,9 @@ export default function Step({ state, timer, type, tooltip, ...rest }) {
 
   return (
     <>
-      <div
-        className={borderStyle}
-        data-tip={tooltip}
-        data-for={`step_${rest.key}`}
-        {...rest}
-      >
+      <div className={borderStyle} data-tip={tooltip} data-for={`step_${rest.key}`} {...rest}>
         <div className={style.container}>{icon}</div>
       </div>
-      {tooltip && <Tooltip id={`step_${rest.key}`}>{label}</Tooltip>}
     </>
   );
 }

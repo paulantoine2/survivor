@@ -1,0 +1,33 @@
+@value colors: "../../helpers/colors.css";
+@value title, primary, primaryDark, highlight, bgPrimary, bgSecondary, text from colors;
+
+.container {
+  border: solid 2px primaryDark;
+  background-color: bgPrimary;
+  width: 400px;
+}
+.scroll {
+  /* height: 300px; */
+  max-height: 100%;
+  overflow: scroll;
+}
+.elements {
+  padding: 10px;
+}
+.input {
+  background: bgSecondary;
+  border: none;
+  border-top: solid 1px primary;
+  border-bottom: solid 2px primaryDark;
+  flex: 1;
+  padding: 0 10px;
+  outline: none;
+  appearance: none;
+  font-size: 16px;
+  color: text;
+}
+.actions {
+  display: flex;
+  margin-right: -2px;
+  margin-bottom: -2px;
+}

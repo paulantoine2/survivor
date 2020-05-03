@@ -48,7 +48,7 @@
 }
 .icon__border {
   composes: border from '../Step/Step.module.css';
-  padding: 2px;
+  padding: 3px;
   margin-right: -15px;
   z-index: 100;
 }
