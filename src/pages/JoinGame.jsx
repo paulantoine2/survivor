@@ -4,7 +4,6 @@ import TextField from '@material-ui/core/TextField';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import io from 'socket.io-client';
 
 export default class JoinGamePage extends React.Component {
   state = {
@@ -13,24 +12,36 @@ export default class JoinGamePage extends React.Component {
     agility: 0,
     survival: 0,
     swim: 0,
+    roomId: null,
   };
-  socket = io('http://localhost:3000');
+
+  componentDidMount() {
+    this.setState({ roomId: this.props.roomId });
+  }
+
   handleChange = (event) => {
     const { name, value } = event.target;
     this.setState({
       [name]: value,
     });
   };
-  handleSubmit = async (event) => {
+  handleSubmit = (event) => {
     event.preventDefault();
-    this.socket.emit('joinGame', this.state);
+    this.props.onSubmit(this.state);
   };
   render() {
     const { strength, agility, survival, swim } = this.state;
+    const { roomId, onBack } = this.props;
     return (
       <Container component="main" maxWidth="xs">
-        <Typography component="h1" variant="h5">
-          Rejoindre une partie
+        <Button onClick={onBack} color="primary" variant="outlined">
+          Retour au lobby
+        </Button>
+        <Typography component="h1" variant="h4">
+          {roomId ? `Rejoindre la partie ${roomId}` : `Nouvelle partie`}
+        </Typography>
+        <Typography component="h2" variant="h5">
+          Quel joueur serez-vous ?
         </Typography>
         <form noValidate onSubmit={this.handleSubmit}>
           <TextField

@@ -4,8 +4,9 @@ const Message = require('./Message');
 const Team = require('./Team');
 
 module.exports = new Schema({
-  players: [Player],
-  messages: [Message],
-  teams: [Team],
+  players: { type: [Player], default: [] },
+  messages: { type: [Message], default: [] },
+  teams: { type: [Team], default: [] },
   createdAt: { type: Date, default: Date.now },
+  open: { type: Boolean, default: true },
 });

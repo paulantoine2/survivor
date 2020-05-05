@@ -1,7 +1,8 @@
-const { Player } = require('../mongoose');
+const { Player, GameRoom } = require('../mongoose');
 
-module.exports = async function onJoinGame(data) {
-  await Player.create({
+module.exports = async function onJoinGame(data, callback, namespace) {
+  // Creer le joueur
+  const player = await Player.create({
     userName: data.userName,
     stats: {
       strength: data.strength,
@@ -10,5 +11,16 @@ module.exports = async function onJoinGame(data) {
       survival: data.survival,
     },
   });
-  console.log(`${data.userName} joined the game !`);
+  const room = new GameRoom({ players: [player] });
+
+  // Creer la room avec le joueur si c'est une nouvelle partie
+  if (!data.roomId) await room.save;
+  // Ajoute le joueur a la room rejointe
+  else await GameRoom.updateOne({ _id: data.roomId }, { $push: { players: player } });
+
+  callback(room._id, player._id);
+
+  // Met a jour la liste des rooms sur les clients
+  const gameRooms = await GameRoom.find({});
+  namespace.emit('load', gameRooms);
 };
