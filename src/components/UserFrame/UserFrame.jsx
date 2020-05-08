@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import style from './UserFrame.module.css';
 import { GiVerticalBanner, GiTotem } from 'react-icons/gi';
-import { FaFlag, FaUserPlus } from 'react-icons/fa';
+import { FaFlag, FaUserPlus, FaUser } from 'react-icons/fa';
 import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import Button from '../Button/Button';
@@ -37,7 +37,14 @@ export default function UserFrame({ user, tooltipPlacement, actionPm, actionRepo
               <GiVerticalBanner />
             </div>
             <div className={style.top}>
-              <img src={user.avatarUrl} alt={user.userName} className={style.avatar} />
+              <img
+                src={
+                  user.avatarUrl ||
+                  'https://static1.purepeople.com/articles/7/38/65/67/@/5565428-claude-candidat-de-koh-lanta-2020-sa-624x600-2.jpg'
+                }
+                alt={user.userName}
+                className={style.avatar}
+              />
               <div className={style.username}>{user.userName}</div>
             </div>
             <ul className={style.stats}>
@@ -78,7 +85,14 @@ export default function UserFrame({ user, tooltipPlacement, actionPm, actionRepo
       }
     >
       <div className={cn(style.container, style[user.teamColor])}>
-        <img src={user.avatarUrl} alt={user.userName} className={style.avatar} />
+        <img
+          src={
+            user.avatarUrl ||
+            'https://static1.purepeople.com/articles/7/38/65/67/@/5565428-claude-candidat-de-koh-lanta-2020-sa-624x600-2.jpg'
+          }
+          alt={user.userName}
+          className={style.avatar}
+        />
         <div className={style.flag}>
           <GiVerticalBanner />
         </div>
@@ -89,7 +103,7 @@ export default function UserFrame({ user, tooltipPlacement, actionPm, actionRepo
 
 UserFrame.propTypes = {
   user: PropTypes.shape({
-    avatarUrl: PropTypes.string.isRequired,
+    avatarUrl: PropTypes.string,
     userName: PropTypes.string.isRequired,
     teamColor: PropTypes.string.isRequired,
     teamWinCount: PropTypes.number,

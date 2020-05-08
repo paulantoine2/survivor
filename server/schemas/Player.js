@@ -4,6 +4,7 @@ module.exports = new Schema({
   userName: String,
   avatarUrl: String,
   online: { type: Boolean, default: false },
+  ready: { type: Boolean, default: false },
   stats: {
     agility: { type: Number, min: 0, max: 4 },
     strength: { type: Number, min: 0, max: 4 },

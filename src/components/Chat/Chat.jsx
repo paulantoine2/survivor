@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import style from './Chat.module.css';
 import Button from '../Button/Button';
 import ChatElement from '../ChatElement/ChatElement';
 
 export default function Chat({ elements, ...props }) {
+  const [message, setMessage] = useState('');
+  const handleSend = () => {
+    props.handleSend(message);
+    setMessage('');
+  };
   return (
     <div className={style.container}>
       <div className={style.scroll}>
@@ -17,8 +22,15 @@ export default function Chat({ elements, ...props }) {
         </div>
       </div>
       <div className={style.actions}>
-        <input type="text" placeholder="Ecrire un message" className={style.input} />
-        <Button>Envoyer</Button>
+        <input
+          type="text"
+          placeholder="Ecrire un message"
+          className={style.input}
+          value={message}
+          onChange={(event) => setMessage(event.target.value)}
+          onKeyPress={(event) => event.key === 'Enter' && handleSend()}
+        />
+        <Button onClick={handleSend}>Envoyer</Button>
       </div>
     </div>
   );

@@ -9,4 +9,5 @@ module.exports = new Schema({
   teams: { type: [Team], default: [] },
   createdAt: { type: Date, default: Date.now },
   open: { type: Boolean, default: true },
+  status: { type: String, default: 'created' },
 });

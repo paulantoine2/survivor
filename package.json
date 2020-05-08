@@ -30,7 +30,7 @@
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
-    "server": "node server/index.js"
+    "server": "nodemon server/index.js"
   },
   "eslintConfig": {
     "extends": "react-app"

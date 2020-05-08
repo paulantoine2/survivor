@@ -1,45 +1,24 @@
 import React, { Component } from 'react';
 import { Checkbox, Button } from '@material-ui/core';
-import { turnOffPresence } from '../../helpers/presence';
-import { quitGameRoom, updatePlayer, subscribePlayers } from '../../helpers/gameRoom';
-import io from 'socket.io-client';
 
 class WaitingScreen extends Component {
-  socket = io('http://localhost:3000');
-  constructor() {
-    super();
-    this.state = {
-      players: [],
-      loading: true,
-    };
-  }
-  componentDidMount() {
-    subscribePlayers(this.props.roomId, (players) => this.setState({ players }));
-  }
-
-  handleQuit = async (event) => {
-    await turnOffPresence(this.props.roomId);
-    await quitGameRoom(this.props.roomId, this.props.user.uid);
-    this.props.history.push('/');
-  };
-  handleReady = async (event) => {
-    await updatePlayer(this.props.roomId, this.props.user.uid, {
-      ready: event.target.checked,
-    });
+  handleQuit = () => {
+    localStorage.removeItem('roomId');
+    localStorage.removeItem('playerId');
   };
   render() {
-    const { uid } = this.props.user;
+    const { playerId, players } = this.props;
     return (
       <>
         <ul>
-          {this.state.players.map((p) => (
-            <li key={p.id}>
-              {p.id === uid ? (
-                <Checkbox checked={p.ready} onChange={this.handleReady} />
+          {players.map((p) => (
+            <li key={p._id}>
+              {p._id === playerId ? (
+                <Checkbox checked={p.ready} onChange={this.props.handleReady} />
               ) : (
                 <Checkbox checked={p.ready} disabled />
               )}
-              {p.username} - {p.status}
+              {p.userName} - {p.online ? 'Online' : 'Offline'}
             </li>
           ))}
         </ul>

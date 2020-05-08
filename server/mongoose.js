@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const PlayerSchema = require('./schemas/Player');
-const GameRoomSchema = require('./schemas/GameRoom');
 
 mongoose.connect('mongodb://localhost:27017/survivor', { useNewUrlParser: true, useUnifiedTopology: true }).then(
   () => {
@@ -13,6 +11,7 @@ mongoose.connect('mongodb://localhost:27017/survivor', { useNewUrlParser: true, 
 
 module.exports = {
   mongoose,
-  Player: mongoose.model('Player', PlayerSchema),
-  GameRoom: mongoose.model('GameRoom', GameRoomSchema),
+  Player: mongoose.model('Player', require('./schemas/Player')),
+  GameRoom: mongoose.model('GameRoom', require('./schemas/GameRoom')),
+  Message: mongoose.model('Message', require('./schemas/Message')),
 };

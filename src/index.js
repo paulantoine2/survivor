@@ -2,11 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import App from './App.jsx';
-import { CssBaseline } from '@material-ui/core';
+import './global.css';
 
 ReactDOM.render(
   <>
-    <CssBaseline />
     <App />
   </>,
   document.getElementById('root')

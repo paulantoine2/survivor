@@ -5,8 +5,9 @@ import Container from '@material-ui/core/Container';
 import { TableHead, Table, TableRow, TableCell, TableBody, Button, CircularProgress } from '@material-ui/core';
 import io from 'socket.io-client';
 import JoinGamePage from './JoinGame';
+import { withRouter } from 'react-router-dom';
 
-export default class LobbyPage extends React.Component {
+class LobbyPage extends React.Component {
   state = {
     loading: true,
     joinGame: false,
@@ -34,6 +35,7 @@ export default class LobbyPage extends React.Component {
     this.socket.emit('joinGame', data, (playerId, roomId) => {
       localStorage.setItem('roomId', roomId);
       localStorage.setItem('playerId', playerId);
+      this.props.history.push('/play');
     });
   };
 
@@ -93,3 +95,5 @@ export default class LobbyPage extends React.Component {
     );
   }
 }
+
+export default withRouter(LobbyPage);

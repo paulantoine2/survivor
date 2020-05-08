@@ -62,7 +62,7 @@ ChatElement.propTypes = {
   children: PropTypes.node.isRequired,
   type: PropTypes.oneOf(['info', 'message']).isRequired,
   user: PropTypes.shape({
-    avatarUrl: PropTypes.string.isRequired,
+    avatarUrl: PropTypes.string,
     userName: PropTypes.string.isRequired,
     teamColor: PropTypes.string.isRequired,
   }),
