@@ -1,6 +1,6 @@
 const { Schema } = require('mongoose');
 
-module.exports = new Schema({
+module.exports = Schema({
   content: String,
   type: String,
   timeStamp: { type: Date, default: Date.now },

@@ -6,6 +6,7 @@ import { TableHead, Table, TableRow, TableCell, TableBody, Button, CircularProgr
 import io from 'socket.io-client';
 import JoinGamePage from './JoinGame';
 import { withRouter } from 'react-router-dom';
+import { authenticationService } from '../services/authentification';
 
 class LobbyPage extends React.Component {
   state = {
@@ -29,6 +30,10 @@ class LobbyPage extends React.Component {
 
   handleJoin = (roomId) => {
     this.setState({ joinGame: true, roomId });
+  };
+
+  handleLogout = () => {
+    authenticationService.logout();
   };
 
   handleSubmitJoin = (data) => {
@@ -68,6 +73,9 @@ class LobbyPage extends React.Component {
         </Typography>
         <Button onClick={() => this.handleJoin()} color="primary" variant="outlined">
           Nouvelle partie
+        </Button>
+        <Button onClick={this.handleLogout} color="primary" variant="outlined">
+          Logout
         </Button>
         <Table size="small">
           <TableHead>

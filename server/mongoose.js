@@ -1,17 +1,21 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/survivor', { useNewUrlParser: true, useUnifiedTopology: true }).then(
-  () => {
+const MONGOURI = 'mongodb://localhost:27017/survivor';
+
+const ConnectMongo = async () => {
+  try {
+    await mongoose.connect(MONGOURI, { useNewUrlParser: true, useUnifiedTopology: true });
     console.log('Mongo connected');
-  },
-  (err) => {
-    console.error(err);
+  } catch (e) {
+    console.log(e);
+    throw e;
   }
-);
+};
 
 module.exports = {
-  mongoose,
+  ConnectMongo,
   Player: mongoose.model('Player', require('./schemas/Player')),
   GameRoom: mongoose.model('GameRoom', require('./schemas/GameRoom')),
   Message: mongoose.model('Message', require('./schemas/Message')),
+  User: mongoose.model('User', require('./schemas/User')),
 };
